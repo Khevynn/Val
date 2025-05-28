@@ -1,37 +1,48 @@
 package com.teste.teste;
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 
 import com.teste.teste.User.UserEntity;
 import com.teste.teste.User.UserRepository;
 
-import org.springframework.web.bind.annotation.PathVariable;
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController //this label warn the compiler that it's a REST CONTROLLER CLASS
+@RestController 
 public class RestApiController {
     
     //Instatiating the class with the database manipulation methods
-    @Autowired //this label avoid calling the class with "new userRepository..."
+    @Autowired 
     private UserRepository userRepository;
 
 
-    //route to SELECT an user by id
-    @RequestMapping(value="/users/{id}", method = RequestMethod.GET)
-    public UserEntity getUsers (@PathVariable(value="id") int id){
-        Optional<UserEntity> user = userRepository.findById(id); //"Optional" returns the first value finded with the id
+    //route to REGISTER an user into the database
+    @RequestMapping(value="/user/register", method = RequestMethod.POST)
+    public ResponseEntity<?> setUser (@RequestBody @Valid UserEntity user){
 
-        return user.get();
-    }
+        Optional<UserEntity> findByEmail = userRepository.findByEmail(user.getEmail()); //cheacking if email is duplicated
 
-    //route to INSERT an user into the database
-    @RequestMapping(value="/users/", method = RequestMethod.POST)
-    public UserEntity setUser (@RequestBody UserEntity user){
-        return userRepository.save(user); //saving the user into the database
+        Optional<UserEntity> findByUser = userRepository.findByUser(user.getUser()); //checking if user is duplicated
+
+        if(!findByEmail.isEmpty()){ //email duplicated
+            return ResponseEntity.badRequest().body("Email já cadastrado");
+        } 
+        
+        if(!findByUser.isEmpty()) { //user duplicated
+            return ResponseEntity.badRequest().body("Nome de usuário já cadastrado");
+        } 
+
+        user.setEncodedPassword(user.getPassword()); //encoding password
+        userRepository.save(user); //saving user
+        return ResponseEntity.ok("Usuário registrado");
+        
     }
 
 }

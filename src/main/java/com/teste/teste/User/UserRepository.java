@@ -7,5 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 
     //optional returns the first value finded
-    Optional<UserEntity> findByUserAndPassword(String user, String password); //search user by name and pass
+    Optional<UserEntity> findByUserAndPassword(String user, String password); 
+    Optional<UserEntity> findByEmail(String email); 
+    Optional<UserEntity> findByUser(String user); 
 }
