@@ -61,10 +61,10 @@ Realiza login do usuário.
 
 ---
 
-## 💻 Client – Frontend (React)
+## 💻 Client – Frontend (React + Vite)
 
 - ⚛️ **Framework:** React  
-- 🚪 **Porta padrão:** `3000` (por padrão, ao rodar `npm run dev`)  
+- 🚪 **Porta padrão:** `5173` (por padrão, ao rodar `npm run dev`)  
 - 📁 Local: `/client`
 
 ### 📌 Funcionalidades esperadas (em progresso)
