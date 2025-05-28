@@ -1,4 +1,4 @@
-package com.teste.teste.Config;
+package com.olimpo.Security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package com.teste.teste.User;
+package com.olimpo.Entity;
 
 import java.sql.Timestamp;
 
@@ -38,15 +38,7 @@ public class UserEntity{
      
      public UserEntity(){
      }
-     public UserEntity(String user, String password, String email){
-          this.user = user;
-          this.password = password;
-          this.email = email;
-     }
-     public UserEntity(String user, String password){
-          this.user = user;
-          this.password = password;
-     }
+     
      public int getId(){
           return this.id;
      }
