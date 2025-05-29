@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import jakarta.validation.Valid;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +28,7 @@ public class RestApiController {
     private UserRepository userRepository;
 
     //route to REGISTER an user into the database
+    @CrossOrigin(origins = "*") //allow ever origin
     @PostMapping("/user/register")
     public ResponseEntity<ApiResponse> register(@RequestBody @Valid RegisterRequest request) {
     
@@ -50,12 +52,13 @@ public class RestApiController {
         user.setEmail(request.getEmail());
         user.setEncodedPassword(request.getPassword());
         userRepository.save(user);
-
+        
         //returning a good response
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(new ApiResponse("Usuário registrado com sucesso."));
 }   
+    @CrossOrigin(origins = "*")
     @PostMapping("/user/login")
     public ResponseEntity<ApiResponse> login (@RequestBody @Valid LoginRequest request){
 

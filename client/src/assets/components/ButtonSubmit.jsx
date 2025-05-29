@@ -1,6 +1,7 @@
 function ButtonSubmit(props){
     return(
-        <button className="text-center py-2 rounded-full bg-yellow-600 w-[400px]">
+        <button className="text-center py-4 rounded-full bg-linear-to-r from-yellow-700 to-yellow-600 w-full"
+        {...props}>
             {props.text}
         </button>
     )
