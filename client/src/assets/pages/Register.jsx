@@ -23,7 +23,7 @@ function Register() {
     username: "",
     password: "",
   });
-
+  
   //Navigate to login page
   function onLoginClick() {
     navigate("/login");
@@ -86,20 +86,25 @@ function Register() {
     }
   }
   return (
-    <div className="w-screen h-screen bg-gray-900 flex justify-center items-center rounded-lg">
-       <div className="lg:w-[700px] lg:h-[800px] bg-linear-to-r from-yellow-700 to-yellow-600 rounded-l-xl">
+    <div className="w-screen h-screen bg-gray-900 flex justify-center items-center">
+       <div className="lg:w-[700px] lg:h-[800px] bg-linear-to-r from-yellow-900
+        to-yellow-600 rounded-l-xl animated-background">
         </div> 
       <div className="w-[500px] h-[800px] bg-gray-800 text-white flex flex-col items-center justify-center space-y-10 rounded-r-xl px-7">
 
         {/* Botão de entrar */}
         <div
-          className="text-yellow-600 rounded-md py-2 px-3 flex text-2xl items-center space-x-4 justify-end w-full"
+          className="text-yellow-600 py-2 px-3 flex text-2xl justify-end w-full"
+          
+        >
+          <div className="flex w-[200px] space-x-4 items-center cursor-pointer justify-end"
           onClick={() => {
             onLoginClick();
-          }}
-        >
-          <button>Entrar </button>
-          <ArrowRight />
+          }}>
+            <button className="cursor-pointer">Entrar </button>
+            <ArrowRight />
+          </div>
+          
         </div>
 
         {/* Títulos*/}
@@ -109,12 +114,11 @@ function Register() {
         </div>
 
         {/* Formulário */}
-        <div className="space-y-5 w-full">
+        <div className="space-y-5 w-full h-[200px]">
           <Input
             value={email}
             title="E-mail"
             type="email"
-            placeholder="exemplo@email.com"
             onChange={(e) => setEmail(e.target.value)}
             error={error.email}
           />
@@ -122,7 +126,6 @@ function Register() {
           <Input
             value={username}
             title="Usuario"
-            placeholder="Digite o usuario"
             onChange={(e) => setUser(e.target.value)}
             error={error.username}
           />
@@ -131,12 +134,13 @@ function Register() {
             value={password}
             type="password"
             title="Senha"
-            placeholder="Digite a senha"
             onChange={(e) => setPassword(e.target.value)}
             error={error.password}
           />
         </div>
-        <div className="h-[50px] flex items-center justify-center">
+
+        {/* Caixa de erro */}
+        <div className="h-[50px] flex items-center justify-center ">
           {mutation.isPending ? (
             <Loading />
           ) : error.server ? (

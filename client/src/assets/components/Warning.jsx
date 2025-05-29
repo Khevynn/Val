@@ -12,7 +12,7 @@ function Warning(props) {
       >
         <div className="flex space-x-2">
           <TriangleAlert />
-          <span class="font-medium">
+          <span className="font-medium">
             {props.error ? "Erro ao enviar formulário." : "Sucesso ao enviar formulário"}
           </span>
         </div>
