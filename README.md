@@ -67,11 +67,16 @@ Realiza login do usuário.
 - 🚪 **Porta padrão:** `5173` (por padrão, ao rodar `npm run dev`)  
 - 📁 Local: `/client`
 
-### 📌 Funcionalidades esperadas (em progresso)
+### 📌 Tecnologias usadas
 
-- Formulário de cadastro e login
-- Integração com a API via `fetch`/`axios`
-- Interface moderna e responsiva com foco em jogadores de FPS
+O front-end da aplicação foi desenvolvido com **React** no formato de uma **SPA (Single Page Application)**. As seguintes bibliotecas e ferramentas foram utilizadas para enriquecer a experiência do usuário e facilitar o desenvolvimento:
+
+- **React Router DOM**: Para controle de rotas e navegação entre páginas de forma fluida.
+- **React Query (@tanstack/react-query)**: Gerenciamento de estado assíncrono e cache de dados de API.
+- **Framer Motion**: Biblioteca de animações e transições para melhorar a interatividade da interface.
+- **React Hook Form + Zod**: Manipulação de formulários com validações baseadas em esquemas.
+- **Vite**: Utilizado como bundler e servidor de desenvolvimento, proporcionando um ambiente rápido e moderno.
+
 
 ---
 
