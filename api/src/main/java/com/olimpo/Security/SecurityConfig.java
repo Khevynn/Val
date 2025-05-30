@@ -13,7 +13,7 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable()) // desativa CSRF para APIs
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/user/register", "/user/login", "/error").permitAll()
+                .requestMatchers("/user/register", "/user/login", "/error", "/h2-console/**").permitAll()
                 .anyRequest().authenticated()
             )
             .httpBasic(httpBasic -> httpBasic.disable()) // desativa login básico

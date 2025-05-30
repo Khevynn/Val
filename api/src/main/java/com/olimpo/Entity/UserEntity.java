@@ -26,7 +26,7 @@ public class UserEntity{
      private String password;
 
      @NotBlank(message = "O nome de usuário é obrigatório")
-     @Column(name="user")
+     @Column(name="username")
      private String user;
 
      @NotBlank(message = "O email é obrigatório")

@@ -1,4 +1,3 @@
-import { ArrowRight } from "lucide-react";
 import Input from "../components/Input";
 import ButtonSubmit from "../components/ButtonSubmit";
 import { useNavigate } from "react-router-dom";
@@ -7,23 +6,48 @@ import axios from "axios";
 import { useState } from "react";
 import Loading from "../components/Loading";
 import Warning from "../components/Warning";
+import GradientBox from "../components/GradientBox";
+import Article from "../components/Article";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 function Register() {
   const navigate = useNavigate();
   const registerRoute = "http://localhost:8081/user/register";
-
-  const [email, setEmail] = useState("");
-  const [username, setUser] = useState("");
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
-
-  const [error, setError] = useState({
-    server: "",
-    email: "",
-    username: "",
-    password: "",
+  const [status, setStatus] = useState({
+    success: false,
+    message: "",
   });
-  
+  const registerSchema = z.object({
+    //Validation Schema
+    user: z
+      .string()
+      .min(3, "Usuario é obrigatório")
+      .max(16, "Usuário muito extenso")
+      .regex(
+        /^[a-zA-Z0-9_]+$/,
+        "Nome de usuário deve conter apenas letras, números ou _"
+      ),
+    password: z
+      .string()
+      .min(3, "Senha é obrigatória")
+      .max(16, "Usuário muito extenso"),
+    email: z.string().email("Email inválido").nonempty("Email é obrigatório"),
+  });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset
+  } = useForm({
+    resolver: zodResolver(registerSchema),
+  });
+
+  function handleRegister(data) {
+    mutation.mutate(data);
+  }
+
   //Navigate to login page
   function onLoginClick() {
     navigate("/login");
@@ -41,8 +65,11 @@ function Register() {
         .then((response) => response.data);
     },
     onSuccess: (data) => {
-      //OK
-      setMessage(data.message);
+      setStatus({
+        success: true,
+        message: data.message,
+      });
+      reset(); //clean form
     },
 
     onError: (error) => {
@@ -51,109 +78,77 @@ function Register() {
         case "ERR_BAD_REQUEST": //400 bad request
           // eslint-disable-next-line no-case-declarations
           let _response = JSON.parse(error.request.response);
-
-          setError((prev) => ({
-            ...prev,
-            server: _response.message,
-          }));
+          setStatus({
+            success: false,
+            message: _response.message,
+          });
           break;
         default: //server error
-          setError((prev) => ({
-            ...prev,
-            server: "Servidor Indisponível. Tente novamente mais tarde.",
-          }));
+          setStatus({
+            success: false,
+            message: "Servidor indisponível. Tente mais tarde",
+          });
       }
     },
   });
-  function onFormSubmit() {
-    if (!email || !username || !password) {
-      setError({
-        email: email ? "" : "E-mail obrigatório",
-        username: username ? "" : "Usuário obrigatório",
-        password: password ? "" : "Senha obrigatória",
-        server: "",
-      });
-    } else {
-      setError("");
-      setUser("");
-      setEmail("");
-      setPassword("");
-      mutation.mutate({
-        email: email,
-        user: username,
-        password: password,
-      });
-    }
-  }
+
   return (
     <div className="w-screen h-screen bg-gray-900 flex justify-center items-center">
-       <div className="lg:w-[700px] lg:h-[800px] bg-linear-to-r from-yellow-900
-        to-yellow-600 rounded-l-xl animated-background">
-        </div> 
-      <div className="w-[500px] h-[800px] bg-gray-800 text-white flex flex-col items-center justify-center space-y-10 rounded-r-xl px-7">
-
-        {/* Botão de entrar */}
-        <div
-          className="text-yellow-600 py-2 px-3 flex text-2xl justify-end w-full"
-          
+      <GradientBox />
+      <Article
+        changePage={onLoginClick}
+        pageTitle={"Registrar"}
+        pageSubtitle={"Bem-vindo ao Olimpo."}
+        pageButton={"Entrar"}
+      >
+        <form
+          className="w-full h-[500px]  relative space-y-5"
+          onSubmit={handleSubmit(handleRegister)}
         >
-          <div className="flex w-[200px] space-x-4 items-center cursor-pointer justify-end"
-          onClick={() => {
-            onLoginClick();
-          }}>
-            <button className="cursor-pointer">Entrar </button>
-            <ArrowRight />
+          {/* Formulário */}
+          <div className="space-y-5 w-full h-[200px]">
+            <Input
+              label="E-mail"
+              id="email"
+              type="email"
+              error={errors.email && errors.email.message}
+              {...register("email")}
+            />
+
+            <Input
+              label="Usuario"
+              id="username"
+              error={errors.user && errors.user.message}
+              {...register("user")}
+            />
+
+            <Input
+              type="password"
+              label="Senha"
+              id="password"
+              error={errors.password && errors.password.message}
+              {...register("password")}
+            />
           </div>
-          
-        </div>
 
-        {/* Títulos*/}
-        <div className="flex flex-col items-center space-y-2">
-          <h1 className="text-4xl text-yellow-600 ">Registrar</h1>
-          <h2 className="text-3xl">Bem vindo ao Olimpo</h2>
-        </div>
+          {/* Caixa de erro */}
+          <div className="h-[150px] flex items-center justify-center ">
+            {
+              mutation.isPending ? (
+                <Loading /> //Loading
+              ) : status.message == "" ? (
+                "" //Nothing
+              ) : status.success ? (
+                <Warning ok={status.message} /> //Success
+              ) : (
+                <Warning error={status.message} />
+              ) //Error
+            }
+          </div>
 
-        {/* Formulário */}
-        <div className="space-y-5 w-full h-[200px]">
-          <Input
-            value={email}
-            title="E-mail"
-            type="email"
-            onChange={(e) => setEmail(e.target.value)}
-            error={error.email}
-          />
-
-          <Input
-            value={username}
-            title="Usuario"
-            onChange={(e) => setUser(e.target.value)}
-            error={error.username}
-          />
-
-          <Input
-            value={password}
-            type="password"
-            title="Senha"
-            onChange={(e) => setPassword(e.target.value)}
-            error={error.password}
-          />
-        </div>
-
-        {/* Caixa de erro */}
-        <div className="h-[50px] flex items-center justify-center ">
-          {mutation.isPending ? (
-            <Loading />
-          ) : error.server ? (
-            <Warning error={error.server} />
-          ) : message ? (
-            <Warning ok={message} />
-          ) : (
-            ""
-          )}
-        </div>
-
-        <ButtonSubmit text="Registrar" onClick={() => onFormSubmit()} />
-      </div>
+          <ButtonSubmit text="Registrar" type="submit" />
+        </form>
+      </Article>
     </div>
   );
 }
