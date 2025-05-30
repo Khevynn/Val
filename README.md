@@ -14,7 +14,10 @@ olimpo/
 ```
 
 ---
-
+## Banco de datos
+- O banco de datos criado automaticamente ao rodar o projeto (H2).
+- Para acessar o banco de datos enquanto a aplicação está rodando:
+  ``` http://localhost:8081/h2-console ```
 ## 🔧 API – Backend (Spring Boot)
 
 - 📦 **Framework:** Spring Boot `3.4.4`  
