@@ -48,7 +48,7 @@ function Register() {
   );
 
   return (
-    <div className="w-screen h-screen bg-gray-900 flex justify-center items-center">
+    <div className="w-screen h-screen bg-neutral-950 flex justify-center items-center">
       <GradientArticle />
       <FormArticle
         changePage={onLoginRedirect}
