@@ -1,6 +1,6 @@
 import { ArrowRight } from "lucide-react";
 
-function Article(props) {
+function FormArticle(props) {
   return (
     <div className="w-[500px] h-[800px] bg-gray-800 text-white flex flex-col items-center justify-center space-y-10 rounded-r-xl px-7">
       {/* Botão de entrar */}
@@ -28,4 +28,4 @@ function Article(props) {
   );
 }
 
-export default Article;
+export default FormArticle;

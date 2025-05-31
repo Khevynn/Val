@@ -1,4 +1,4 @@
-function GradientBox() {
+function GradientArticle() {
   return (
     <div
       className="lg:w-[700px] lg:h-[800px] bg-linear-to-r from-yellow-900
@@ -7,4 +7,4 @@ function GradientBox() {
   );
 }
 
-export default GradientBox;
+export default GradientArticle;

@@ -1,16 +1,15 @@
-import Input from "../components/Input";
-import ButtonSubmit from "../components/ButtonSubmit";
-import { useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
-import { useState } from "react";
-import Loading from "../components/Loading";
-import Warning from "../components/Warning";
-import GradientBox from "../components/GradientBox";
-import Article from "../components/Article";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { registerSchema } from "../schemas/schemas.js";
+import { useAuthMutation } from "../hooks/useAuthMutation.js";
+import FormArticle from "../components/layouts/FormArticle.jsx";
+import GradientArticle from "../components/layouts/GradientArticle.jsx";
+import Input from "../components/ui/Input.jsx";
+import ButtonSubmit from "../components/ui/ButtonSubmit.jsx";
+import StatusBox from "../components/feedback/StatusBox.jsx";
+import { goToLogin } from "../routes/navigation.js";
 
 function Register() {
   const navigate = useNavigate();
@@ -19,27 +18,12 @@ function Register() {
     success: false,
     message: "",
   });
-  const registerSchema = z.object({
-    //Validation Schema
-    user: z
-      .string()
-      .min(3, "Usuario é obrigatório")
-      .max(16, "Usuário muito extenso")
-      .regex(
-        /^[a-zA-Z0-9_]+$/,
-        "Nome de usuário deve conter apenas letras, números ou _"
-      ),
-    password: z
-      .string()
-      .min(3, "Senha é obrigatória")
-      .max(16, "Usuário muito extenso"),
-    email: z.string().email("Email inválido").nonempty("Email é obrigatório"),
-  });
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
   } = useForm({
     resolver: zodResolver(registerSchema),
   });
@@ -50,52 +34,23 @@ function Register() {
 
   //Navigate to login page
   function onLoginClick() {
-    navigate("/login");
+    goToLogin(navigate);
   }
 
   //Send data to the back-end
-  const mutation = useMutation({
-    mutationFn: ({ email, user, password }) => {
-      return axios
-        .post(registerRoute, {
-          email,
-          user,
-          password,
-        })
-        .then((response) => response.data);
+  const mutation = useAuthMutation(
+    registerRoute,
+    (data) => {
+      setStatus({ success: true, message: data.message });
+      reset();
     },
-    onSuccess: (data) => {
-      setStatus({
-        success: true,
-        message: data.message,
-      });
-      reset(); //clean form
-    },
-
-    onError: (error) => {
-      //ERROR
-      switch (error.code) {
-        case "ERR_BAD_REQUEST": //400 bad request
-          // eslint-disable-next-line no-case-declarations
-          let _response = JSON.parse(error.request.response);
-          setStatus({
-            success: false,
-            message: _response.message,
-          });
-          break;
-        default: //server error
-          setStatus({
-            success: false,
-            message: "Servidor indisponível. Tente mais tarde",
-          });
-      }
-    },
-  });
+    (success, message) => setStatus({ success, message })
+  );
 
   return (
     <div className="w-screen h-screen bg-gray-900 flex justify-center items-center">
-      <GradientBox />
-      <Article
+      <GradientArticle />
+      <FormArticle
         changePage={onLoginClick}
         pageTitle={"Registrar"}
         pageSubtitle={"Bem-vindo ao Olimpo."}
@@ -132,23 +87,15 @@ function Register() {
           </div>
 
           {/* Caixa de erro */}
-          <div className="h-[150px] flex items-center justify-center ">
-            {
-              mutation.isPending ? (
-                <Loading /> //Loading
-              ) : status.message == "" ? (
-                "" //Nothing
-              ) : status.success ? (
-                <Warning ok={status.message} /> //Success
-              ) : (
-                <Warning error={status.message} />
-              ) //Error
-            }
-          </div>
+          <StatusBox
+            isLoading={mutation.isPending}
+            message={status.message}
+            success={status.success}
+          />
 
           <ButtonSubmit text="Registrar" type="submit" />
         </form>
-      </Article>
+      </FormArticle>
     </div>
   );
 }
