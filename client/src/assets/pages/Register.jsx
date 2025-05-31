@@ -33,7 +33,7 @@ function Register() {
   }
 
   //Navigate to login page
-  function onLoginClick() {
+  function onLoginRedirect() {
     goToLogin(navigate);
   }
 
@@ -51,7 +51,7 @@ function Register() {
     <div className="w-screen h-screen bg-gray-900 flex justify-center items-center">
       <GradientArticle />
       <FormArticle
-        changePage={onLoginClick}
+        changePage={onLoginRedirect}
         pageTitle={"Registrar"}
         pageSubtitle={"Bem-vindo ao Olimpo."}
         pageButton={"Entrar"}

@@ -31,7 +31,7 @@ function Login() {
   }
 
   const navigate = useNavigate(); //navigation function
-  function onRegisterClick() {
+  function onRegisterRedirect() {
     goToRegister(navigate);
   }
   const loginRoute = "http://localhost:8081/user/login";
@@ -47,7 +47,7 @@ function Login() {
     <div className="w-screen h-screen bg-gray-900 flex justify-center items-center">
       <GradientArticle />
       <FormArticle
-        changePage={onRegisterClick}
+        changePage={onRegisterRedirect}
         pageTitle={"Login"}
         pageSubtitle={"Bem-vindo de volta."}
         pageButton={"Registrar"}
