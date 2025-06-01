@@ -1,32 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { goToLogin, goToRegister } from "../routes/navigation";
-import { ArrowRight, CrosshairIcon, Gamepad2, Gift, Trophy } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useEffect } from "react";
 import "aos/dist/aos.css";
 import Aos from "aos";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import Carousel from "../components/layouts/Carousel";
 
-import Slider from "react-slick";
-const settings = {
-  dots: true,
-  infinite: true,
-  speed: 3500,
-  slidesToShow: 3,
-  slidesToScroll: 1,
-  autoplay: true,
-  autoplaySpeed: 0, 
-  cssEase: "linear",
-  arrows: false,
-  responsive: [
-    {
-      breakpoint: 1224, // 768px device width
-      settings: {
-        slidesToShow: 1,
-      },
-    }
-  ]
-};
+
 function Index() {
   const navigate = useNavigate();
 
@@ -43,7 +23,7 @@ function Index() {
     });
   }, []);
   return (
-    <div className="w-screen  overflow-x-hidden">
+    <div className="w-screen">
       <div className="w-full h-[900px] bg-neutral-950 bg-[url(/wallpaper.png)] bg-cover bg-fixed">
         {/* Navbar */}
         <div
@@ -94,34 +74,7 @@ function Index() {
       </div>
       {/* Section 2*/}
       <div className="w-full h-[400px] bg-neutral-950 flex justify-center items-center">
-        <div className="w-[80%] text-yellow-700">
-          <Slider {...settings}>
-            <div>
-              <div className="rounded-full border border-yellow-700 h-[120px] w-[300px] flex justify-center items-center flex-col">
-                <CrosshairIcon />
-                <h1>Ranking Competitivo Mensal</h1>
-              </div>
-            </div>
-            <div>
-              <div className="rounded-full border border-yellow-700 h-[120px] w-[300px] flex justify-center items-center flex-col">
-                <Trophy/>
-                <h1>Crie e Gerencie Torneios</h1>
-              </div>
-            </div>
-            <div>
-              <div className="rounded-full border border-yellow-700 h-[120px] w-[300px] flex justify-center items-center flex-col">
-                <Gift />
-                <h1>Premiações Exclusivas</h1>
-              </div>
-            </div>
-            <div>
-              <div className="rounded-full border border-yellow-700 h-[120px] w-[300px] flex justify-center items-center flex-col">
-                <Gamepad2 />
-                <h1>Lobbys Privados</h1>
-              </div>
-            </div>
-          </Slider>
-        </div>
+        <Carousel />
       </div>
       {/* Section 3*/}
       <div className="w-full bg-neutral-950 bg-[url(/wallpaper.png)] bg-fixed bg-bottom">
@@ -131,7 +84,7 @@ function Index() {
             data-aos="fade-right"
           >
             <button
-              className="bg-yellow-600 font-bold rounded-2xl w-[200px] h-[50px] cursor-pointer flex justify-center items-center space-x-3"
+              className="bg-yellow-600 font-bold rounded-2xl w-[200px] h-[50px] cursor-pointer flex justify-center items-center space-x-3 mt-3"
               onClick={onRegisterRedirect}
             >
               <span>Registrar</span>
@@ -140,13 +93,12 @@ function Index() {
           </div>
 
           <div
-            className="w-full md:w-[500px] space-y-3 text-center md:text-end"
+            className="w-full md:w-[500px] text-center md:text-end"
             data-aos="fade-left"
           >
-            <h1 className="text-3xl font-bold">Crie e Gerencie Torneios</h1>
+            <h1 className="text-3xl font-bold">Lobbys Privados para Treinos</h1>
             <p className="text-2xl">
-              Organize torneios de Valorant de forma prática e rápida. Convide
-              jogadores, monte chaves e acompanhe resultados em tempo real.
+              Monte salas exclusivas para treinos profissionais. Ambiente ideal para times que buscam evolução sem distrações.
             </p>
           </div>
         </div>

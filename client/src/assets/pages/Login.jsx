@@ -5,11 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { loginSchema } from "../schemas/schemas.js";
 import { useAuthMutation } from "../hooks/useAuthMutation.js";
 import FormArticle from "../components/layouts/FormArticle.jsx";
-import GradientArticle from "../components/layouts/GradientArticle.jsx";
 import Input from "../components/ui/Input.jsx";
 import ButtonSubmit from "../components/ui/ButtonSubmit.jsx";
 import StatusBox from "../components/feedback/StatusBox.jsx";
-import { goToRegister } from "../routes/navigation.js";
+import { goToHome, goToRegister } from "../routes/navigation.js";
 
 function Login() {
   const [status, setStatus] = useState({
@@ -40,20 +39,20 @@ function Login() {
     (data) => {
       setStatus({ success: true, message: data.message });
       reset();
+      goToHome(navigate);
     },
     (success, message) => setStatus({ success, message })
   );
   return (
-    <div className="w-screen h-screen bg-neutral-950 flex justify-center items-center">
-      <GradientArticle />
+    <div>
       <FormArticle
         changePage={onRegisterRedirect}
-        pageTitle={"Login"}
+        pageTitle={"Entrar"}
         pageSubtitle={"Bem-vindo de volta."}
         pageButton={"Registrar"}
       >
         <form
-          className="w-full h-[500px] relative space-y-5"
+          className="w-full h-full relative space-y-5"
           onSubmit={handleSubmit(handleLogin)}
         >
           {/* Formulário */}

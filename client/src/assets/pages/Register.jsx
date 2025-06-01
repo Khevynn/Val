@@ -31,7 +31,7 @@ function Register() {
   function handleRegister(data) {
     mutation.mutate(data);
   }
-
+  
   //Navigate to login page
   function onLoginRedirect() {
     goToLogin(navigate);
@@ -48,8 +48,7 @@ function Register() {
   );
 
   return (
-    <div className="w-screen h-screen bg-neutral-950 flex justify-center items-center">
-      <GradientArticle />
+    <div>
       <FormArticle
         changePage={onLoginRedirect}
         pageTitle={"Registrar"}
@@ -57,7 +56,7 @@ function Register() {
         pageButton={"Entrar"}
       >
         <form
-          className="w-full h-[500px]  relative space-y-5"
+          className="w-full h-full relative space-y-5"
           onSubmit={handleSubmit(handleRegister)}
         >
           {/* Formulário */}
