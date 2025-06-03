@@ -131,7 +131,7 @@ function Index() {
       </div>
       <div className="w-full h-[50px] bg-black flex justify-center items-center">
         <h2 className="text-white ">
-          Copyright ©2025 Olimpo Desenvolvido por Vitor Mirand e Khevynn
+          Copyright ©2025 Olimpo Desenvolvido por Vitor Miranda e Khevynn Sá
         </h2>
       </div>
     </div>

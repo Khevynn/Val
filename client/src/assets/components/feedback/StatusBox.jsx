@@ -3,7 +3,7 @@ import Warning from "./Warning";
 
 function StatusBox({ isLoading, message, success }) {
   return (
-    <div className="h-[150px] flex items-center justify-center">
+    <div className="h-[150px] flex lg:items-center justify-center">
       {
         isLoading ? (
           <Loading /> //Loading
