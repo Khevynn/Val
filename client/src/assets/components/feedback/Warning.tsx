@@ -1,6 +1,11 @@
 import { TriangleAlert } from "lucide-react";
 
-function Warning(props) {
+interface WarningProps{
+  error?: string,
+  ok?: string
+}
+
+function Warning(props: WarningProps) {
   return (
     <div className="w-[400px] p-2">
       <div

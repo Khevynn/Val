@@ -105,7 +105,7 @@ function Index() {
       </div>
       {/* Footer */}
       <div className="w-full bg-neutral-950">
-        <div class="grid md:grid-cols-2 min-h-[300px] space-y-5 p-3">
+        <div className="grid md:grid-cols-2 min-h-[300px] space-y-5 p-3">
           <div
             className="flex justify-center items-center flex-col space-y-3"
             data-aos="fade-up"

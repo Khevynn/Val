@@ -2,13 +2,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { registerSchema } from "../schemas/schemas.js";
+import { RegisterSchema, registerSchema } from "../schemas/schemas.js";
 import { useAuthMutation } from "../hooks/useAuthMutation.js";
-import FormArticle from "../components/layouts/FormArticle.jsx";
-import GradientArticle from "../components/layouts/GradientArticle.jsx";
-import Input from "../components/ui/Input.jsx";
-import ButtonSubmit from "../components/ui/ButtonSubmit.jsx";
-import StatusBox from "../components/feedback/StatusBox.jsx";
+import FormArticle from "../components/layouts/FormArticle.js";
+import Input from "../components/ui/Input.js";
+import ButtonSubmit from "../components/ui/ButtonSubmit.js";
+import StatusBox from "../components/feedback/StatusBox.js";
 import { goToLogin } from "../routes/navigation.js";
 
 function Register() {
@@ -24,11 +23,11 @@ function Register() {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm({
+  } = useForm <RegisterSchema>({
     resolver: zodResolver(registerSchema),
   });
 
-  function handleRegister(data) {
+  function handleRegister(data: RegisterSchema) {
     mutation.mutate(data);
   }
   
@@ -38,14 +37,14 @@ function Register() {
   }
 
   //Send data to the back-end
-  const mutation = useAuthMutation(
-    registerRoute,
-    (data) => {
+  const mutation = useAuthMutation( {
+    url: registerRoute,
+    onSuccessCallback: (data) => {
       setStatus({ success: true, message: data.message });
       reset();
     },
-    (success, message) => setStatus({ success, message })
-  );
+    onErrorCallback: (success, message) => setStatus({ success, message })
+  });
 
   return (
     <div>
@@ -63,7 +62,7 @@ function Register() {
           <div className="space-y-5 w-full h-[200px]">
             <Input
               label="E-mail"
-              id="email"
+              elementId="email"
               type="email"
               error={errors.email && errors.email.message}
               {...register("email")}
@@ -71,7 +70,7 @@ function Register() {
 
             <Input
               label="Usuario"
-              id="username"
+              elementId="username"
               error={errors.user && errors.user.message}
               {...register("user")}
             />
@@ -79,7 +78,7 @@ function Register() {
             <Input
               type="password"
               label="Senha"
-              id="password"
+              elementId="password"
               error={errors.password && errors.password.message}
               {...register("password")}
             />
@@ -92,7 +91,7 @@ function Register() {
             success={status.success}
           />
 
-          <ButtonSubmit text="Registrar" type="submit" />
+          <ButtonSubmit text="Registrar"/>
         </form>
       </FormArticle>
     </div>

@@ -2,12 +2,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { loginSchema } from "../schemas/schemas.js";
+import { LoginSchema, loginSchema } from "../schemas/schemas.js";
 import { useAuthMutation } from "../hooks/useAuthMutation.js";
-import FormArticle from "../components/layouts/FormArticle.jsx";
-import Input from "../components/ui/Input.jsx";
-import ButtonSubmit from "../components/ui/ButtonSubmit.jsx";
-import StatusBox from "../components/feedback/StatusBox.jsx";
+import FormArticle from "../components/layouts/FormArticle.js";
+import Input from "../components/ui/Input.js";
+import ButtonSubmit from "../components/ui/ButtonSubmit.js";
+import StatusBox from "../components/feedback/StatusBox.js";
 import { goToHome, goToRegister } from "../routes/navigation.js";
 
 function Login() {
@@ -16,16 +16,17 @@ function Login() {
     success: false,
     message: "",
   });
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm({
+  } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
   });
 
-  function handleLogin(data) {
+  function handleLogin(data: LoginSchema) {
     mutation.mutate(data);
   }
 
@@ -34,15 +35,15 @@ function Login() {
     goToRegister(navigate);
   }
   const loginRoute = "http://localhost:8081/user/login";
-  const mutation = useAuthMutation(
-    loginRoute,
-    (data) => {
+  const mutation = useAuthMutation({
+    url: loginRoute,
+    onSuccessCallback: (data) => {
       setStatus({ success: true, message: data.message });
       reset();
       goToHome(navigate);
     },
-    (success, message) => setStatus({ success, message })
-  );
+    onErrorCallback: (success, message) => setStatus({ success, message })
+  });
   return (
     <div>
       <FormArticle
@@ -59,13 +60,13 @@ function Login() {
           <div className="space-y-5 w-full">
             <Input
               label="Usuario"
-              id="username"
+              elementId="username"
               {...register("user")}
-              error={errors.username && errors.username.message}
+              error={errors.user && errors.user.message}
             />
             <Input
               label="Senha"
-              id="password"
+              elementId="password"
               type="password"
               {...register("password")}
               error={errors.password && errors.password.message}
@@ -78,7 +79,7 @@ function Login() {
             message={status.message}
             success={status.success}
           />
-          <ButtonSubmit text="Entrar" type="submit" />
+          <ButtonSubmit text="Entrar" />
         </form>
       </FormArticle>
     </div>

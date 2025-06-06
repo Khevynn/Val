@@ -1,8 +1,15 @@
 import Aos from "aos";
 import { ArrowRight } from "lucide-react";
-import { useEffect } from "react";
+import { ReactNode, useEffect } from "react";
 
-function FormArticle(props) {
+interface FormProps{
+  changePage: () => void, //no parameters, no returns
+  pageButton: String,
+  pageTitle: String,
+  pageSubtitle: String,
+  children: ReactNode
+}
+function FormArticle(props: FormProps) {
   useEffect(() => {
     //fade
     Aos.init({

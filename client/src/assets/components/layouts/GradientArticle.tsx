@@ -11,8 +11,7 @@ function GradientArticle() {
   
   return (
     <div
-      className="w-screen md:w-[500px] h-[300px] lg:w-[700px] lg:h-[800px] bg-linear-to-r from-yellow-900
-        to-yellow-600 lg:rounded-l-xl rounded-t-xl lg:rounded-t-none animated-background bg-[url(/wallpaper.png)] bg-cover flex justify-center items-center flex-col space-y-3 bg-no-repeat"
+      className="w-screen hidden lg:w-[700px] lg:h-[800px]  lg:rounded-l-xl rounded-t-xl lg:rounded-t-none bg-[url(/wallpaper.png)] bg-cover lg:flex justify-center items-center flex-col space-y-3 bg-no-repeat"
     >
       <div>
         <h1 className="text-white text-2xl text-center font-bold ">

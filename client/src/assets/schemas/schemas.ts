@@ -1,6 +1,8 @@
 // src/schemas/authSchemas.js
 import { z } from "zod";
 
+
+
 export const loginSchema = z.object({
   user: z
     .string()
@@ -35,3 +37,6 @@ export const registerSchema = z.object({
     .regex(/[^A-Za-z0-9]/, "A senha deve conter um caractere especial"),
   email: z.string().email("Email inválido").nonempty("Email é obrigatório"),
 });
+
+export type LoginSchema = z.infer<typeof loginSchema>
+export type RegisterSchema = z.infer<typeof registerSchema>

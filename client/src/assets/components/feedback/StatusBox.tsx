@@ -1,7 +1,13 @@
 import Loading from "../ui/Loading";
 import Warning from "./Warning";
 
-function StatusBox({ isLoading, message, success }) {
+interface StatusBoxProps {
+  isLoading: boolean,
+  message: string,
+  success: boolean
+}
+
+function StatusBox({ isLoading, message, success }: StatusBoxProps) {
   return (
     <div className="h-[150px] flex lg:items-center justify-center">
       {
