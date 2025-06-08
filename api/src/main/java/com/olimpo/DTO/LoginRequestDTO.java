@@ -1,21 +1,19 @@
 package com.olimpo.DTO;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class LoginRequestDTO {
     
-    @NotBlank(message = "O nome de usuário é obrigatório")
-    private String user;
+    @NotBlank(message = "Campos obrigatórios ausentes ou formato inválido.")
+    private String email;
     
-    @NotBlank(message = "A senha é obrigatório")
+    @NotBlank(message = "Campos obrigatórios ausentes ou formato inválido.")
     private String password;
 
-    public LoginRequestDTO(String user, String password){
-        this.user = user;
+    public LoginRequestDTO(String email, String password){
+        this.email = email;
         this.password = password;
     }
 }

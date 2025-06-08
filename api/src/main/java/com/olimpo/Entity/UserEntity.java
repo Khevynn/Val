@@ -29,6 +29,11 @@ public class UserEntity {
      @Getter @Setter
      private String user;
 
+     @NotBlank(message = "A tag é obrigatória")
+     @Column(name="tag")
+     @Getter @Setter
+     private String tag;
+
      @NotBlank(message = "A senha é obrigatório")
      @Column(name="password")
      @Getter

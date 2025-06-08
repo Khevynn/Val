@@ -1,10 +1,12 @@
 package com.olimpo.DTO;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class RegisterRequestDTO {
+
+    @NotBlank(message = "O email é obrigatório")
+    private String email;
 
     @NotBlank(message = "O nome de usuário é obrigatório")
     private String user;
@@ -12,12 +14,9 @@ public class RegisterRequestDTO {
     @NotBlank(message = "A senha é obrigatório")
     private String password;
 
-    @NotBlank(message = "O email é obrigatório")
-    private String email;
-
-    public RegisterRequestDTO(String user, String password, String email){
-        this.user = user;
+    public RegisterRequestDTO(String email, String user, String password){
         this.email = email;
+        this.user = user;
         this.password = password;
     }
 }
