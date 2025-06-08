@@ -28,11 +28,18 @@ public class UserController {
     @PostMapping(APIRoutes.USER_REGISTER_ROUTE)
     public ResponseEntity<ApiResponse> CallRegistration(@RequestBody @Valid RegisterRequestDTO request) {
 
-        //checking if email is duplicated
+        //Check if email is duplicated
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {  
             return ResponseEntity
                     .badRequest()
                     .body(new ApiResponse("E-mail já existe.")); 
+        }
+        
+        //Check if password is strong
+        if (!isPasswordStrong(request.getPassword())) {
+            return ResponseEntity
+                .badRequest()
+                .body(new ApiResponse("A senha deve conter pelo menos 8 caracteres, uma letra maiúscula, uma letra minúscula e um número."));
         }
 
         return UserServices.RegisterUser(request, userRepository);
@@ -45,4 +52,10 @@ public class UserController {
     }
 
 
+    private static boolean isPasswordStrong(String password) {
+        return password.length() >= 8 &&
+               password.matches(".*[A-Z].*") &&
+               password.matches(".*[a-z].*") &&
+               password.matches(".*\\d.*");
+    }
 }

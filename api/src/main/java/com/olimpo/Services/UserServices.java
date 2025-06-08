@@ -40,7 +40,6 @@ public class UserServices {
                         .body(new ApiResponse("Não há tags disponíveis para esse usuário, tente com outro usuário."));
                 }
             } while (usedTags.contains(tag));
-
             
             //Creating an UserEntity with a encoded password
             UserEntity user = new UserEntity();
