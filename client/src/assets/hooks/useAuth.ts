@@ -1,13 +1,13 @@
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 
-interface UseuseAuthMutationParams {
+interface UseAuthMutationParams {
   url: string,
   onSuccessCallback: (data: any) => void,
   onErrorCallback: (success: boolean, message: string) => void
 }
 
-export function useAuthMutation({url, onSuccessCallback, onErrorCallback}: UseuseAuthMutationParams) : UseMutationResult {
+export function useAuthMutation({url, onSuccessCallback, onErrorCallback}: UseAuthMutationParams) : UseMutationResult <any, AxiosError, any> {
   return useMutation({
     mutationFn: (data) => axios.post(url, data).then(res => res.data),
     onSuccess: onSuccessCallback,

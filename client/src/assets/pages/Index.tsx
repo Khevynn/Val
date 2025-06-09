@@ -4,8 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { useEffect } from "react";
 import "aos/dist/aos.css";
 import Aos from "aos";
-import Carousel from "../components/layouts/Carousel";
-
+import Button from "../components/ui/Button";
 
 function Index() {
   const navigate = useNavigate();
@@ -16,15 +15,22 @@ function Index() {
   function onRegisterRedirect() {
     goToRegister(navigate);
   }
+
   useEffect(() => {
     //fade
     Aos.init({
       duration: 1000,
+      once: true,
+      mirror: false,
+      disable: "mobile"
     });
   }, []);
+
   return (
     <div className="w-screen">
       <div className="w-full h-[900px] bg-neutral-950 bg-[url(/wallpaper.png)] bg-cover bg-fixed">
+
+
         {/* Navbar */}
         <div
           className="max-w-7xl mx-auto flex justify-between items-center p-3"
@@ -44,7 +50,7 @@ function Index() {
           </div>
         </div>
 
-        {/* Main */}
+        {/* Main Container*/}
         <div className="h-full w-full flex justify-center items-center text-white">
           <div className="max-w-7xl w-full flex flex-col md:flex-row justify-between items-center px-5 space-y-6 ">
             <div
@@ -61,35 +67,29 @@ function Index() {
               className="w-full md:w-auto flex justify-center md:justify-end"
               data-aos="fade-left"
             >
-              <button
-                className="bg-yellow-600 font-bold rounded-2xl w-[200px] h-[50px] cursor-pointer flex justify-center items-center space-x-3"
-                onClick={onLoginRedirect}
-              >
-                <span>Entrar</span>
-                <ArrowRight />
-              </button>
+              <Button  
+              onClick={onLoginRedirect} 
+              text="Entrar" 
+              icon={<ArrowRight />}/>
             </div>
           </div>
         </div>
       </div>
-      {/* Section 2*/}
-      <div className="w-full h-[400px] bg-neutral-950 flex justify-center items-center">
-        <Carousel />
-      </div>
+
+
+      
       {/* Section 3*/}
-      <div className="w-full bg-neutral-950 bg-[url(/wallpaper.png)] bg-fixed bg-bottom">
+      <div className="w-full bg-neutral-950">
         <div className="max-w-7xl mx-auto h-[600px] flex flex-col-reverse md:flex-row justify-center md:justify-between items-center text-white px-5 py-8 space-y-3">
           <div
             className="w-full md:w-auto flex justify-center md:justify-start  "
             data-aos="fade-right"
           >
-            <button
-              className="bg-yellow-600 font-bold rounded-2xl w-[200px] h-[50px] cursor-pointer flex justify-center items-center space-x-3 mt-3"
-              onClick={onRegisterRedirect}
-            >
-              <span>Registrar</span>
-              <ArrowRight />
-            </button>
+            <Button  
+            onClick={onRegisterRedirect} 
+            text="Registrar" 
+            icon={<ArrowRight />}/>
+            
           </div>
 
           <div
@@ -103,8 +103,9 @@ function Index() {
           </div>
         </div>
       </div>
+
       {/* Footer */}
-      <div className="w-full bg-neutral-950">
+      <div className="w-full bg-neutral-950 bg-[url(/wallpaper.png)] bg-fixed bg-bottom">
         <div className="grid md:grid-cols-2 min-h-[300px] space-y-5 p-3">
           <div
             className="flex justify-center items-center flex-col space-y-3"
@@ -129,8 +130,10 @@ function Index() {
           </div>
         </div>
       </div>
-      <div className="w-full h-[50px] bg-black flex justify-center items-center">
-        <h2 className="text-white ">
+
+      {/* Copright */}
+      <div className="w-full min-h-[50px] bg-black flex justify-center items-center">
+        <h2 className="text-white text-center p-5">
           Copyright ©2025 Olimpo Desenvolvido por Vitor Miranda e Khevynn Sá
         </h2>
       </div>

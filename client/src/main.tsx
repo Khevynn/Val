@@ -7,7 +7,6 @@ import Register from "./assets/pages/Register";
 import Login from "./assets/pages/Login";
 import Index from "./assets/pages/Index";
 import Home from "./assets/pages/Home";
-import AuthLayout from "./assets/components/layouts/AuthLayout";
 
 let router = createBrowserRouter([
   {
@@ -19,35 +18,28 @@ let router = createBrowserRouter([
     element: <Home />,
   },
   {
-    path: "/",
-    element: <AuthLayout />,
-    children: [
-      {
-        path: "/register",
-        element: <Register />,
-      },
-      {
-        path: "/login",
-        element: <Login />,
-      },
-    ],
+    path: "/register",
+    element: <Register />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
   },
 ]);
 
 const queryClient = new QueryClient();
 
-const container = document.getElementById('root');
+const container = document.getElementById("root");
 
 if (container) {
   const root = createRoot(container);
   root.render(
-  <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
-  </StrictMode>
-);
+    <StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </StrictMode>
+  );
 } else {
   console.error("Elemento 'root' não encontrado no DOM.");
 }
-
