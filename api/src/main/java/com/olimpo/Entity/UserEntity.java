@@ -24,6 +24,11 @@ public class UserEntity {
      @Getter
      private int id;
 
+     @NotBlank(message = "O email é obrigatório")
+     @Column(name="email")
+     @Getter @Setter
+     private String email;
+
      @NotBlank(message = "O nome de usuário é obrigatório")
      @Column(name="username")
      @Getter @Setter
@@ -38,11 +43,6 @@ public class UserEntity {
      @Column(name="password")
      @Getter
      private String password;
-
-     @NotBlank(message = "O email é obrigatório")
-     @Column(name="email")
-     @Getter @Setter
-     private String email;
 
      @CreationTimestamp(source=SourceType.DB)
      @Getter
