@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.olimpo.Routes.APIRoutes;
+
 @Configuration
 public class SecurityConfig {
 
@@ -13,7 +15,8 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable()) // desativa CSRF para APIs
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/user/register", "/user/login", "/error", "/h2-console/**", "/tournaments/create", "/tournaments/").permitAll()
+                .requestMatchers(APIRoutes.USER_DELETE_ROUTE, APIRoutes.USER_GET_PROFILE_ROUTE, APIRoutes.USER_LOGIN_ROUTE,
+                APIRoutes.USER_REGISTER_ROUTE, APIRoutes.USER_UPDATE_PROFILE_ROUTE, "/error", "/h2-console/**").permitAll()
                 .anyRequest().authenticated()
             )
             .httpBasic(httpBasic -> httpBasic.disable()) // desativa login básico

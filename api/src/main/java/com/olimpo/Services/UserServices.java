@@ -8,7 +8,7 @@ import java.util.Optional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.http.ResponseEntity;
 
-import com.olimpo.DTO.ApiResponse;
+import com.olimpo.DTO.ApiMessage;
 import com.olimpo.DTO.LoginRequestDTO;
 import com.olimpo.DTO.RegisterRequestDTO;
 import com.olimpo.Entity.UserEntity;
@@ -18,7 +18,7 @@ import org.springframework.http.HttpStatus;
 
 public class UserServices {
 
-    public static ResponseEntity<ApiResponse> RegisterUser(RegisterRequestDTO request, UserRepository userRepository) {
+    public static ResponseEntity<ApiMessage> RegisterUser(RegisterRequestDTO request, UserRepository userRepository) {
         try{
             //Get all existing tags for this username
             List<UserEntity> existingUsers = userRepository.findAllByUser(request.getUser());
@@ -37,10 +37,12 @@ public class UserServices {
                 if (attempts >= maxAttempts) {
                     return ResponseEntity
                         .status(HttpStatus.CONFLICT)
-                        .body(new ApiResponse("Não há tags disponíveis para esse usuário, tente com outro usuário."));
+                        .body(new ApiMessage("Não há tags disponíveis para esse usuário, tente com outro usuário."));
                 }
             } while (usedTags.contains(tag));
             
+            System.err.println("Tag: " + tag);
+
             //Creating an UserEntity with a encoded password
             UserEntity user = new UserEntity();
             user.setEmail(request.getEmail());
@@ -53,33 +55,57 @@ public class UserServices {
             //returning a good response
             return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(new ApiResponse("Usuário registrado com sucesso."));
+                .body(new ApiMessage("Usuário registrado com sucesso."));
 
         } catch(Exception e) {
             System.out.println(e.getMessage());
             return ResponseEntity
                     .internalServerError()
-                    .body(new ApiResponse("Erro interno do servidor ao criar usuário."));
+                    .body(new ApiMessage("Erro interno do servidor ao criar usuário."));
         }
     }
 
-    public static ResponseEntity<ApiResponse> LoginUser(LoginRequestDTO request, UserRepository userRepository) {
+    public static ResponseEntity<ApiMessage> LoginUser(LoginRequestDTO request, UserRepository userRepository) {
         try{
             Optional<UserEntity> userSearched = userRepository.findByEmail(request.getEmail()); //finding a user by the email
 
             if (userSearched.isEmpty() || !new BCryptPasswordEncoder().matches(request.getPassword(), userSearched.get().getPassword() )) { //there is not a user
                 return ResponseEntity
                         .status(HttpStatus.UNAUTHORIZED)
-                        .body(new ApiResponse("E-mail ou senha inválidos."));
+                        .body(new ApiMessage("E-mail ou senha inválidos."));
             }
 
-            return ResponseEntity.ok(new ApiResponse("Login bem-sucedido"));
+            return ResponseEntity.ok(new ApiMessage("Login bem-sucedido"));
 
         } catch(Exception e) {
             System.out.println(e.getMessage());
             return ResponseEntity
                     .internalServerError()
-                    .body(new ApiResponse("Erro interno do servidor. Tente novamente mais tarde."));
+                    .body(new ApiMessage("Erro interno do servidor. Tente novamente mais tarde."));
+        }
+    }
+
+    public static ResponseEntity<ApiMessage> GetProfile(String user, String tag, UserRepository userRepository) {
+        try{
+            Optional<UserEntity> userSearched = userRepository.findByUserAndTag(user, tag);
+
+            if(userSearched.isEmpty()) {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body(new ApiMessage("Usuário não encontrado."));
+            }
+
+            return ResponseEntity.ok(new ApiMessage(
+                "username: " + userSearched.get().getUser() + 
+                ", tag: " + userSearched.get().getTag() + 
+                ", email: " + userSearched.get().getEmail()
+            ));
+
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity
+                    .internalServerError()
+                    .body(new ApiMessage("Não foi possível ler o perfil do usuário."));
         }
     }
 
