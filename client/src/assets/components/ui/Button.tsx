@@ -1,19 +1,17 @@
 
 interface ButtonProps {
-    onClick: () => void,
+    onClick?: () => void,
     text: string,
-    icon?: any
 }
 
 
-function Button({onClick, text, icon}: ButtonProps) {
+function Button({onClick, text}: ButtonProps) {
   return (
     <button
-      className="bg-yellow-600 font-bold rounded-2xl w-[200px] h-[50px] cursor-pointer flex justify-center items-center space-x-3 mt-3"
-      onClick={onClick}
+      className="bg-yellow-theme rounded-2xl min-w-[200px] w-full py-4 cursor-pointer flex justify-center items-center space-x-3 text-white"
+       type="submit"
     >
       <span>{text}</span>
-      {icon}
     </button>
   );
 }

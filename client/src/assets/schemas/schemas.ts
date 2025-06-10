@@ -2,14 +2,7 @@
 import { z } from "zod";
 
 export const loginSchema = z.object({
-  user: z
-    .string()
-    .min(3, "Usuario é obrigatório")
-    .max(12, "Usuário muito extenso (12 digitos)")
-    .regex(
-      /^[a-zA-Z0-9_]+$/,
-      "Username deve conter apenas letras, números ou _"
-    ),
+  email: z.string().email("Email inválido").nonempty("Email é obrigatório"),
   password: z
     .string()
     .min(3, "Senha obrigatória")
