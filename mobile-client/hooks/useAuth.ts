@@ -1,5 +1,5 @@
 import { useMutation} from "@tanstack/react-query";
-import axios from "axios";
+import axios, { Axios, AxiosError } from "axios";
 import { useState } from "react";
 
 
@@ -17,12 +17,13 @@ export const UseAuth: any = (url: string) => {
         message: data.message,
       })
     },
-    onError: (error) => {
+    onError: (error: AxiosError) => {
+      const axiosError = error as AxiosError<{message: string}>
       setStatus({
         success: false,
-        message: (error.message == "Network Error") 
-        ? "Erro de rede. Por favor tente mais tarde." 
-        : error.message,
+       message: axiosError?.message === "Network Error"
+        ? "Erro de rede. Por favor, tente mais tarde."
+        : axiosError?.response?.data?.message || "Ocorreu um erro inesperado."
       })
     },
   })

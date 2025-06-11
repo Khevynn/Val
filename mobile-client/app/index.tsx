@@ -12,11 +12,11 @@ export default function Index() {
         <Text className="text-white text-2xl mt-3"> Bem-vindo </Text>
         <Text className="text-grey">Mantenha-se conectado</Text>
         <View className="w-[80%]">
-          <Button text="Entrar" onPress={() => router.push("/login")} />
+          <Button text="Entrar" onPress={() => router.push("/Login")} />
         </View>
         <View className="flex flex-row mt-5">
           <Text className="text-grey px-2">Ainda não tem uma conta?</Text>
-          <Link href="/register">
+          <Link href="/Register">
             <Text className="text-theme ">Registre-se</Text>
           </Link>
         </View>
