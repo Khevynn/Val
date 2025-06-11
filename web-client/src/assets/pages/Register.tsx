@@ -18,7 +18,7 @@ function Register() {
   };
 
   //@ts-ignore auth fetch
-  const { status, mutate, isPending, reset } = UseAuth(import.meta.env.VITE_API_AUTH);
+  const { status, mutate, isPending} = UseAuth(import.meta.env.VITE_API_REGISTER);
 
   const HandleRegister = (data: RegisterSchema) => {
     mutate(data);
@@ -29,11 +29,12 @@ function Register() {
     register,
     handleSubmit,
     formState: { errors },
+     reset 
   } = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
   });
 
-  //Go to home
+  //Reset form
     useEffect(() => {
       if (status.success){
         reset()
