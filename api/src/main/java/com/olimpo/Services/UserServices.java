@@ -141,13 +141,14 @@ public class UserServices {
             }
 
             //Update the user
-            userSearched.get().setUser(request.getNewUsername());
-            userSearched.get().setTag(request.getNewTag());
-            userSearched.get().setDescription(request.getNewDescription());
-            userSearched.get().setEncodedPassword(request.getNewPassword());
-            userSearched.get().setValorantUsername(request.getValorantUsername());
-            userSearched.get().setValorantTag(request.getValorantTag());
-            userRepository.save(userSearched.get());
+            UserEntity userEntity = userSearched.get();
+            userEntity.setUser(request.getNewUsername());
+            userEntity.setTag(request.getNewTag());
+            userEntity.setDescription(request.getNewDescription());
+            userEntity.setEncodedPassword(request.getNewPassword());
+            userEntity.setValorantUsername(request.getValorantUsername());
+            userEntity.setValorantTag(request.getValorantTag());
+            userRepository.save(userEntity);
 
             return ResponseEntity
                 .ok()
