@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 
 import com.olimpo.DTO.Requests.LoginRequestDTO;
 import com.olimpo.DTO.Requests.RegisterRequestDTO;
@@ -15,6 +16,7 @@ import com.olimpo.DTO.Requests.UpdateProfileRequestDTO;
 
 import com.olimpo.DTO.Responses.APIResponse;
 import com.olimpo.DTO.Responses.GetProfileResponse;
+import com.olimpo.Entity.AccountStatus;
 import com.olimpo.Entity.UserEntity;
 import com.olimpo.Repository.UserRepository;
 
@@ -51,6 +53,7 @@ public class UserServices {
             user.setUser(request.getUser());
             user.setTag(tag);
             user.setEncodedPassword(request.getPassword());
+            user.setAccountStatus(AccountStatus.Activated);
             userRepository.save(user);
 
             
@@ -76,6 +79,13 @@ public class UserServices {
                         .status(HttpStatus.UNAUTHORIZED)
                         .body(new APIResponse("E-mail ou senha inválidos."));
             }
+
+            if(isAccountBannedOrDeleted(userSearched.get())){
+                return ResponseEntity
+                        .status(HttpStatus.FORBIDDEN)
+                        .body(new APIResponse("Conta excluída ou banida!"));
+            }
+
 
             return ResponseEntity.ok(new APIResponse("Login bem-sucedido"));
 
@@ -104,6 +114,7 @@ public class UserServices {
                 userSearched.get().getDescription(),
                 userSearched.get().getValorantUsername(),
                 userSearched.get().getValorantTag(),
+                userSearched.get().getAccountStatus(),
                 "Perfil carregado com sucesso."
             ));
 
@@ -125,6 +136,12 @@ public class UserServices {
                     .body(new APIResponse("Usuário não encontrado."));
             }
 
+            if(isAccountBannedOrDeleted(userSearched.get())){
+                return ResponseEntity
+                        .status(HttpStatus.FORBIDDEN)
+                        .body(new APIResponse("Conta excluída ou banida!"));
+            }
+            
             //Check if the old password is correct
             if(!new BCryptPasswordEncoder().matches(request.getOldPassword(), userSearched.get().getPassword())) {
                 return ResponseEntity
@@ -161,7 +178,40 @@ public class UserServices {
                     .body(new APIResponse("Erro interno do servidor. Tente novamente mais tarde."));
         }
     }
-    //Helper function to generate a random tag
+    
+    public static ResponseEntity<APIResponse> DeleteUser(String user, String tag, UserRepository userRepository){
+        try{
+            Optional<UserEntity> userSearched = userRepository.findByUserAndTag(user, tag);
+
+            if(userSearched.isEmpty()) {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body(new APIResponse("Usuário não encontrado."));
+            }
+
+            if(isAccountBannedOrDeleted(userSearched.get())){
+                return ResponseEntity
+                        .status(HttpStatus.FORBIDDEN)
+                        .body(new APIResponse("Conta excluída ou banida!"));
+            }
+            
+            UserEntity userEntity = userSearched.get();
+            userEntity.setAccountStatus(AccountStatus.Deleted);
+            userRepository.save(userEntity);
+
+            return ResponseEntity
+                .ok()
+                .body(new APIResponse("Perfil deletado com sucesso."));
+
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity
+                    .internalServerError()
+                    .body(new APIResponse("Erro interno do servidor. Tente novamente mais tarde."));
+        }
+    }
+
+    //Helper functions
     private static String generateRandomTag() {
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         StringBuilder tag = new StringBuilder();
@@ -169,5 +219,8 @@ public class UserServices {
             tag.append(chars.charAt((int)(Math.random() * chars.length())));
         }
         return tag.toString();
+    }
+    private static Boolean isAccountBannedOrDeleted(UserEntity userSearched){
+        return userSearched.getAccountStatus() != AccountStatus.Activated;
     }
 }

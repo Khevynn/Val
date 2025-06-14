@@ -56,6 +56,10 @@ public class UserEntity {
      @Getter @Setter
      private String valorantTag;
      
+     @Column(name="account_status")
+     @Getter @Setter
+     private AccountStatus accountStatus;
+
      @CreationTimestamp(source=SourceType.DB)
      @Getter
      private Timestamp date;

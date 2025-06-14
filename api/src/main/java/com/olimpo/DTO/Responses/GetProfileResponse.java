@@ -1,5 +1,7 @@
 package com.olimpo.DTO.Responses;
 
+import com.olimpo.Entity.AccountStatus;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,9 +13,11 @@ public class GetProfileResponse extends APIResponse{
     private String description;
     private String valorant_username;
     private String valorant_tag;
+    private AccountStatus accountStatus;
 
     public GetProfileResponse(String username, String tag, String email, 
-                                String description, String valorant_username, String valorant_tag, String message) {
+                                String description, String valorant_username, String valorant_tag, 
+                                AccountStatus acc_status, String message) {
         super(message);
         this.username = username;
         this.tag = tag;
@@ -21,5 +25,6 @@ public class GetProfileResponse extends APIResponse{
         this.description = description;
         this.valorant_username = valorant_username;
         this.valorant_tag = valorant_tag;
+        this.accountStatus = acc_status;
     }
 }

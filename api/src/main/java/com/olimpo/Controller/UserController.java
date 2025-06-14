@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -93,6 +94,19 @@ public class UserController {
         }
 
         return UserServices.UpdateProfile(request, user, tag, userRepository);
+    }
+
+    @CrossOrigin(origins = "*")
+    @DeleteMapping(APIRoutes.USER_DELETE_ROUTE)
+    public ResponseEntity<APIResponse> CallDeleteUser(@PathVariable String user, @PathVariable String tag){
+        
+        if(user.isEmpty() || tag.isEmpty()) {
+            return ResponseEntity
+                .badRequest()
+                .body(new APIResponse("Campos obrigatórios ausentes."));
+        }
+
+        return UserServices.DeleteUser(user, tag, userRepository);
     }
 
     @CrossOrigin(origins = "*")
