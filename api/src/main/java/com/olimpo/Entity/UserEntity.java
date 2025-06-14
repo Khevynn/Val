@@ -44,6 +44,18 @@ public class UserEntity {
      @Getter
      private String password;
 
+     @Column(name="description")
+     @Getter @Setter
+     private String description;
+
+     @Column(name="valorant_username")
+     @Getter @Setter
+     private String valorantUsername;
+
+     @Column(name="valorant_tag")
+     @Getter @Setter
+     private String valorantTag;
+     
      @CreationTimestamp(source=SourceType.DB)
      @Getter
      private Timestamp date;

@@ -1,14 +1,14 @@
-package com.olimpo.DTO;
+package com.olimpo.DTO.Responses;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class ApiMessage {
+public class APIResponse {
     private String message;
 
-    public ApiMessage() {}
+    public APIResponse() {}
 
-    public ApiMessage(String message) {
+    public APIResponse(String message) {
         this.message = message;
     }
 }

@@ -11,10 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.olimpo.DTO.ApiMessage;
-
-import com.olimpo.DTO.RegisterRequestDTO;
-import com.olimpo.DTO.LoginRequestDTO;
+import com.olimpo.DTO.Requests.LoginRequestDTO;
+import com.olimpo.DTO.Requests.RegisterRequestDTO;
+import com.olimpo.DTO.Responses.APIResponse;
 import com.olimpo.Repository.UserRepository;
 import com.olimpo.Routes.APIRoutes;
 import com.olimpo.Services.UserServices;
@@ -29,20 +28,20 @@ public class UserController {
 
     @CrossOrigin(origins = "*")
     @PostMapping(APIRoutes.USER_REGISTER_ROUTE)
-    public ResponseEntity<ApiMessage> CallRegistration(@RequestBody @Valid RegisterRequestDTO request) {
+    public ResponseEntity<APIResponse> CallRegistration(@RequestBody @Valid RegisterRequestDTO request) {
 
         //Check if email is duplicated
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {  
             return ResponseEntity
                     .badRequest()
-                    .body(new ApiMessage("E-mail já existe.")); 
+                    .body(new APIResponse("E-mail já existe.")); 
         }
         
         //Check if password is strong
         if (!isPasswordStrong(request.getPassword())) {
             return ResponseEntity
                 .badRequest()
-                .body(new ApiMessage("A senha deve conter pelo menos 8 caracteres, uma letra maiúscula, uma letra minúscula e um número."));
+                .body(new APIResponse("A senha deve conter pelo menos 8 caracteres, uma letra maiúscula, uma letra minúscula e um número."));
         }
 
         return UserServices.RegisterUser(request, userRepository);
@@ -50,18 +49,18 @@ public class UserController {
 
     @CrossOrigin(origins = "*")
     @PostMapping(APIRoutes.USER_LOGIN_ROUTE)
-    public ResponseEntity<ApiMessage> CallLogin(@RequestBody @Valid LoginRequestDTO request) {
+    public ResponseEntity<APIResponse> CallLogin(@RequestBody @Valid LoginRequestDTO request) {
         return UserServices.LoginUser(request, userRepository);
     }
 
     @CrossOrigin(origins = "*")
     @GetMapping(APIRoutes.USER_GET_PROFILE_ROUTE)
-    public ResponseEntity<ApiMessage> CallGetProfile(@PathVariable String user, @PathVariable String tag) {
+    public ResponseEntity<APIResponse> CallGetProfile(@PathVariable String user, @PathVariable String tag) {
 
         if(user.isEmpty() || tag.isEmpty()) {
             return ResponseEntity
                 .badRequest()
-                .body(new ApiMessage("Usuário ou tag não encontrados."));
+                .body(new APIResponse("Usuário ou tag não encontrados."));
         }
 
         return UserServices.GetProfile(user, tag, userRepository);
