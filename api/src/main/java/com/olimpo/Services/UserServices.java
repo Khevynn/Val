@@ -7,15 +7,16 @@ import java.util.Optional;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 
 import com.olimpo.DTO.Requests.LoginRequestDTO;
 import com.olimpo.DTO.Requests.RegisterRequestDTO;
+import com.olimpo.DTO.Requests.UpdateProfileRequestDTO; 
+
 import com.olimpo.DTO.Responses.APIResponse;
 import com.olimpo.DTO.Responses.GetProfileResponse;
 import com.olimpo.Entity.UserEntity;
 import com.olimpo.Repository.UserRepository;
-
-import org.springframework.http.HttpStatus;
 
 public class UserServices {
 
@@ -114,6 +115,51 @@ public class UserServices {
         }
     }
 
+    public static ResponseEntity<APIResponse> UpdateProfile(UpdateProfileRequestDTO request, String user, String tag, UserRepository userRepository) {
+        try{
+            Optional<UserEntity> userSearched = userRepository.findByUserAndTag(user, tag);
+
+            if(userSearched.isEmpty()) {
+                return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new APIResponse("Usuário não encontrado."));
+            }
+
+            //Check if the old password is correct
+            if(!new BCryptPasswordEncoder().matches(request.getOldPassword(), userSearched.get().getPassword())) {
+                return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new APIResponse("Senha antiga inválida."));
+            }
+
+            //Check if the new username and tag is already in use
+            Optional<UserEntity> existingUser = userRepository.findByUserAndTag(request.getNewUsername(), request.getNewTag());
+            if(!existingUser.isEmpty()) {
+                return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body(new APIResponse("Nome de usuário e tag já em uso."));
+            }
+
+            //Update the user
+            userSearched.get().setUser(request.getNewUsername());
+            userSearched.get().setTag(request.getNewTag());
+            userSearched.get().setDescription(request.getNewDescription());
+            userSearched.get().setEncodedPassword(request.getNewPassword());
+            userSearched.get().setValorantUsername(request.getValorantUsername());
+            userSearched.get().setValorantTag(request.getValorantTag());
+            userRepository.save(userSearched.get());
+
+            return ResponseEntity
+                .ok()
+                .body(new APIResponse("Perfil atualizado com sucesso."));
+
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity
+                    .internalServerError()
+                    .body(new APIResponse("Erro interno do servidor. Tente novamente mais tarde."));
+        }
+    }
     //Helper function to generate a random tag
     private static String generateRandomTag() {
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
