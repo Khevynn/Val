@@ -15,31 +15,69 @@ import java.util.Collections;
 import com.olimpo.Entity.UserEntity;
 import com.olimpo.Repository.UserRepository;
 import com.olimpo.Services.TokenService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.olimpo.DTO.Responses.APIResponse;
+import com.olimpo.Routes.APIRoutes;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
+    private static final String BEARER_PREFIX = "Bearer ";
+    private static final String CONTENT_TYPE = "application/json";
+    private static final String INVALID_TOKEN_MESSAGE = "Token inválido ou expirado.";
+
     @Autowired
-    TokenService tokenService;
+    private TokenService tokenService;
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        return path.equals(APIRoutes.REFRESH_TOKEN_ROUTE);
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        var token = this.recoverToken(request);
-        var login = tokenService.validateAccessToken(token);
-
-        if(login != null){
-            UserEntity user = userRepository.findByEmail(login).orElseThrow(() -> new RuntimeException("User Not Found"));
-            var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
-            var authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), null, authorities);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        String token = recoverToken(request);
+        
+        if (token == null) {
+            filterChain.doFilter(request, response);
+            return;
         }
+
+        String login = tokenService.validateAccessToken(token);
+        if (login == null) {
+            sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, INVALID_TOKEN_MESSAGE);
+            return;
+        }
+
+        authenticateUser(login);
         filterChain.doFilter(request, response);
     }
 
-    private String recoverToken(HttpServletRequest request){
-        var authHeader = request.getHeader("Authorization");
-        if(authHeader == null) return null;
-        return authHeader.replace("Bearer ", "");
+    private void authenticateUser(String email) {
+        UserEntity user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("User Not Found"));
+        
+        var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+        var authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), null, authorities);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+    private String recoverToken(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX)) {
+            return null;
+        }
+        return authHeader.replace(BEARER_PREFIX, "");
+    }
+
+    private void sendErrorResponse(HttpServletResponse response, int status, String message) throws IOException {
+        response.setStatus(status);
+        response.setContentType(CONTENT_TYPE);
+        APIResponse errorResponse = new APIResponse(message);
+        response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
     }
 }

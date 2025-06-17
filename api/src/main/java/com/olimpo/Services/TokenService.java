@@ -4,7 +4,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +12,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.olimpo.Entity.UserEntity;
-import com.olimpo.Repository.UserRepository;
 
 /**
  * Service responsible for JWT token management.
@@ -21,9 +19,6 @@ import com.olimpo.Repository.UserRepository;
  */
 @Service
 public class TokenService {
-    // Dependencies
-    @Autowired
-    private UserRepository userRepository;
 
     // Configuration
     @Value("${api.security.token.access-secret}")
@@ -111,7 +106,7 @@ public class TokenService {
 
     /**
      * Gets the expiration time for access tokens.
-     * @return The expiration time (1 hour from now)
+     * @return The expiration time (1 minute from now)
      */
     private Instant getAccessTokenExpiration() {
         return LocalDateTime.now().plusMinutes(1).toInstant(ZoneOffset.of("+01:00"));

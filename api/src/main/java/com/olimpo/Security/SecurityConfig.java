@@ -29,6 +29,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.POST, APIRoutes.REFRESH_TOKEN_ROUTE).permitAll()
                         .requestMatchers(HttpMethod.POST, APIRoutes.USER_LOGIN_ROUTE).permitAll()
                         .requestMatchers(HttpMethod.POST, APIRoutes.USER_REGISTER_ROUTE).permitAll()
                         .requestMatchers(HttpMethod.GET, APIRoutes.USER_LOGOUT_ROUTE).authenticated()

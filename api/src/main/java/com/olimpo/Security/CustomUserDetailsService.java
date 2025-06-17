@@ -1,4 +1,4 @@
-package com.olimpo.Services;
+package com.olimpo.Security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
