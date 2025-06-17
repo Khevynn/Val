@@ -61,7 +61,6 @@ public class TokenService {
             Algorithm algorithm = Algorithm.HMAC256(accessSecret);
             return JWT.require(algorithm)
                     .withIssuer(TOKEN_ISSUER)
-                    .acceptExpiresAt(0) // Ensures the token is not expired
                     .build()
                     .verify(token)
                     .getSubject();
@@ -115,7 +114,7 @@ public class TokenService {
      * @return The expiration time (1 hour from now)
      */
     private Instant getAccessTokenExpiration() {
-        return LocalDateTime.now().plusMinutes(5).toInstant(ZoneOffset.of("+00:00"));
+        return LocalDateTime.now().plusMinutes(1).toInstant(ZoneOffset.of("+01:00"));
     }
 
     /**
@@ -123,6 +122,6 @@ public class TokenService {
      * @return The expiration time (5 days from now)
      */
     private Instant getRefreshTokenExpiration() {
-        return LocalDateTime.now().plusDays(5).toInstant(ZoneOffset.of("+00:00"));
+        return LocalDateTime.now().plusDays(5).toInstant(ZoneOffset.of("+01:00"));
     }
 }
