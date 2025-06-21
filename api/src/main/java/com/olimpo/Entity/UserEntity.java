@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SourceType;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,7 +40,7 @@ public class UserEntity {
 
      @NotBlank(message = "A senha é obrigatório")
      @Column(name="password")
-     @Getter
+     @Getter @Setter
      private String password;
 
      @Column(name="description")
@@ -60,15 +59,14 @@ public class UserEntity {
      @Getter @Setter
      private AccountStatus accountStatus;
 
+     @Column(name="refresh_token")
+     @Getter @Setter
+     private String refreshToken;
+
      @CreationTimestamp(source=SourceType.DB)
      @Getter
      private Timestamp date;
      
      public UserEntity() {
-     }
-
-     public void setEncodedPassword(String password) {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        this.password = encoder.encode(password);
      }
 }
